@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}File Upload{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1>Uploaded Files</h1>
+
+    <!-- File Upload Form -->
+    <h3>Upload a New File</h3>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+          <div class="mb-3">
+            <label for="fileInput" class="form-label">Upload your file</label>
+            <input class="form-control" type="file" id="fileInput" name="file" onchange="updateLabel(this)">
+          </div>
+        <button type="submit" name="upload" class="btn btn-primary">Upload</button>
+    </form>
+
+    <!-- List of Uploaded Files -->
+    <h3 class="mt-5">Existing Files</h3>
+    {% if files %}
+        <ul class="list-group">
+            {% for file in files %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{{ file.url }}" target="_blank">{{ file.name }}</a>
+                    <a href="{% url 'delete_file' file.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No files uploaded yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
