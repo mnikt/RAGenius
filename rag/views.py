@@ -6,6 +6,8 @@ from rag.models import FileModel, DirectoryModel
 
 
 def home(request):
+    if request.user.is_superuser:
+        return redirect('admin:index')
     return render(request, 'home.html', {'user': request.user})
 
 
