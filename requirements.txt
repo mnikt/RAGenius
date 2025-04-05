@@ -1,0 +1,7 @@
+Django
+asgiref
+pip
+wheel
+setuptools
+sqlparse
+typing_extensions
