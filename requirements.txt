@@ -6,3 +6,10 @@ setuptools
 sqlparse
 typing_extensions
 langchain
+pdfplumber
+nltk
+vertexai
+faiss-cpu
+numpy
+google-cloud-aiplatform
+google

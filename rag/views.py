@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseNotAllowed, Http404, HttpResponseForbidden, HttpResponse
+from django.http import HttpResponseNotAllowed, Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect
 
 from rag.models import FileModel, DirectoryModel
+from rag.rag import do, upload_file_to_gcs
 
 
 def home(request):
@@ -14,16 +15,18 @@ def home(request):
 @login_required
 def files(request):
     if request.method == 'GET':
-        files = FileModel.objects.filter(owner=request.user)
+        files = FileModel.objects.filter(directory__owner=request.user)
         return render(request, 'files.html', {'files': files})
     elif request.method == 'POST':
         file = request.FILES['file']
-        directory = request.POST['directory']
+        directory = request.POST.get('directory', 1)
+        url = upload_file_to_gcs(file)
+        do(url)
 
-        if not DirectoryModel.objects.filter(id=directory).filter(owner=request.user).exists():
-            return Http404()
+        # if not DirectoryModel.objects.filter(id=directory).filter(owner=request.user).exists():
+        #     raise Http404()
 
-        FileModel.objects.create(directory=request.user, name=file.name)
+        FileModel.objects.create(directory=directory, name=file.name)
         return redirect('files')
     else:
         return HttpResponseNotAllowed(['GET', 'POST'])
