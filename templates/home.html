@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12 text-center">
+            <h1 class="display-3 text-primary">Welcome to My Site!</h1>
+            <p class="lead text-muted">This is a sample homepage built with Django and Bootstrap.</p>
+            
+            {% if user.is_authenticated %}
+                <p class="lead">Hello, {{ user.username }}! You are logged in.</p>
+                <a href="{% url 'logout' %}" class="btn btn-danger btn-lg">Logout</a>
+            {% else %}
+                <p class="lead">Please <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">Log in</a> or <a href="{% url 'register' %}" class="btn btn-outline-success btn-lg">Register</a> to get started.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Featured Section -->
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Feature 1">
+                <div class="card-body">
+                    <h5 class="card-title">Feature 1</h5>
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci nec nulla.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Feature 2">
+                <div class="card-body">
+                    <h5 class="card-title">Feature 2</h5>
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci nec nulla.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Feature 3">
+                <div class="card-body">
+                    <h5 class="card-title">Feature 3</h5>
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci nec nulla.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
