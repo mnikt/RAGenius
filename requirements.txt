@@ -5,3 +5,4 @@ wheel
 setuptools
 sqlparse
 typing_extensions
+langchain
