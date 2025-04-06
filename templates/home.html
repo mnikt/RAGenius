@@ -1,52 +1,229 @@
-{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Reggie - Strona Główna</title>
+  <style>
+    /* RESET STYLI / PODSTAWOWE */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-{% block title %}Home{% endblock %}
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      color: #212529;
+    }
 
-{% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10 col-sm-12 text-center">
-            <h1 class="display-3 text-primary">Welcome to My Site!</h1>
-            <p class="lead text-muted">This is a sample homepage built with Django and Bootstrap.</p>
-            
-            {% if user.is_authenticated %}
-                <p class="lead">Hello, {{ user.username }}! You are logged in.</p>
-                <a href="{% url 'logout' %}" class="btn btn-danger btn-lg">Logout</a>
-            {% else %}
-                <p class="lead">Please <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">Log in</a> or <a href="{% url 'register' %}" class="btn btn-outline-success btn-lg">Register</a> to get started.</p>
-            {% endif %}
-        </div>
+    /* GÓRNY PASEK NAWIGACJI */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .navbar-logo img {
+      height: 40px; /* dostosuj do swojego logotypu */
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .navbar-right .profile-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: #212529;
+      font-weight: bold;
+    }
+
+    .navbar-right .profile-link:hover {
+      text-decoration: underline;
+    }
+
+    .profile-icon {
+      width: 32px;
+      height: 32px;
+      background-color: #e9ecef;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #6c757d;
+    }
+
+    /* SEKCJA GŁÓWNA */
+    .main-content {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      text-align: center;
+    }
+
+    .main-content h1 {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: #150478; /* kolor zbliżony do niebieskiego Reggiego */
+    }
+
+    /* KARTY / ELEMENTY */
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      width: 260px;
+      background-color: #1111c8;
+      border: 1px solid #eaeaea;
+      border-radius: 8px;
+      padding: 2rem 1rem;
+      text-align: center;
+      transition: box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #0d6efd; /* przykładowy kolor ikony */
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .card-text {
+      font-size: 0.95rem;
+      color: #050202;
+    }
+
+    /* PRZYCISK CTA (call to action) */
+    .cta-container {
+      text-align: center;
+    }
+
+    .cta-button {
+      background-color: #0d6efd;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #0b5ed7;
+    }
+
+    /* STOPKA (opcjonalnie) */
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: #868e96;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- GÓRNY PASEK NAWIGACJI -->
+  <nav class="navbar">
+    <div class="navbar-logo">
+      <!-- Zamiast <img> możesz wstawić swój plik lub tekst -->
+      <img src="{% static 'images/deko.png' %}" alt="Reggie Logo">
     </div>
 
-    <!-- Featured Section -->
-    <div class="row mt-5">
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Feature 1">
-                <div class="card-body">
-                    <h5 class="card-title">Feature 1</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci nec nulla.</p>
-                </div>
-            </div>
+    <div class="navbar-right">
+      <!-- Link do profilu -->
+      <a href="#" class="profile-link">
+        <div class="profile-icon">
+          <!-- Ikonka z Material Icons, Font Awesome itp. -->
+          <span class="material-icons">person</span>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Feature 2">
-                <div class="card-body">
-                    <h5 class="card-title">Feature 2</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci nec nulla.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Feature 3">
-                <div class="card-body">
-                    <h5 class="card-title">Feature 3</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci nec nulla.</p>
-                </div>
-            </div>
-        </div>
+        <span>Mój profil</span>
+      </a>
     </div>
-</div>
-{% endblock %}
+  </nav>
+
+  <!-- SEKCJA GŁÓWNA -->
+  <div class="main-content">
+    <h1>W czym dzisiaj może pomóc Ci Reggie?</h1>
+
+    <!-- TRZY KARTY -->
+    <div class="cards-container">
+      <!-- KARTA 1 -->
+      <div class="card">
+        <div class="card-icon">
+          <span class="material-icons">question_answer</span>
+        </div>
+        <div class="card-title">Rozpocznij rozmowę z Reggiem</div>
+        <div class="card-text">Zadaj mu pytanie zamknięte lub otwarte</div>
+      </div>
+
+      <!-- KARTA 2 -->
+      <div class="card">
+        <div class="card-icon">
+          <span class="material-icons">school</span>
+        </div>
+        <div class="card-title">Twoja baza wiedzy</div>
+        <div class="card-text">Twórz, dodawaj lub usuwaj swoje katalogi baz wiedzy</div>
+      </div>
+
+      <!-- KARTA 3 -->
+{#      <div class="card">#}
+{#        <div class="card-icon">#}
+{#          <span class="material-icons">group_add</span>#}
+{#        </div>#}
+{#        <div class="card-title">Rzuć wyzwanie znajomemu</div>#}
+{#        <div class="card-text">Zaproś znajomego do nowego wyzwania</div>#}
+{#      </div>#}
+{#    </div>#}
+
+    <!-- PRZYCISK CTA (4. element) -->
+    
+
+  </div>
+<div class="cta-container">
+      <button class="cta-button">
+        Wygeneruj test wielokrotnego wyboru
+      </button>
+    </div>
+  <!-- STOPKA (opcjonalnie) -->
+  <footer class="footer">
+    © 2023 Reggie. Wszelkie prawa zastrzeżone.
+  </footer>
+
+</body>
+</html>
