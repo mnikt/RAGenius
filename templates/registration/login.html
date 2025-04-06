@@ -113,7 +113,8 @@
     }
 
   </style>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 </head>
 <body>
   <div class="login-container">
@@ -129,6 +130,7 @@
 
     <!-- Formularz logowania -->
     <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
       <input type="text" name="username" placeholder="Username" required />
       <input type="password" name="password" placeholder="Password" required />
       <button type="submit" class="btn-primary">Sign in</button>
