@@ -40,7 +40,7 @@ def upload_file_to_rag(uploaded_file_gs_url, corpus_name, path):
 def delete_file(file, bucket_name="rag-techfest"):
     client = storage.Client(credentials=credentials, project=PROJECT_ID)
     bucket = client.bucket(bucket_name)
-    blob = bucket.blob(f"uploads/{file.id}.pdf")
+    blob = bucket.blob(f"{file.id}.pdf")
     blob.delete()
 
 
