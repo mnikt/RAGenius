@@ -1,10 +1,18 @@
-{% extends "base.html" %}
-
 {% block title %}File Upload{% endblock %}
 
 {% block content %}
 <div class="container py-5">
     <h1>Uploaded Files</h1>
+
+    <h3>Create a directory</h3>
+    <form action="/directory/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+          <div class="mb-3">
+            <label for="name" class="form-label">Create directory</label>
+            <input class="form-control" id="name" name="name" required>
+          </div>
+        <button type="submit" name="upload" class="btn btn-primary">Create</button>
+    </form>
 
     <!-- File Upload Form -->
     <h3>Upload a New File</h3>
@@ -12,9 +20,19 @@
         {% csrf_token %}
           <div class="mb-3">
             <label for="fileInput" class="form-label">Upload your file</label>
-            <input class="form-control" type="file" id="fileInput" name="file" onchange="updateLabel(this)">
+            <input class="form-control" type="file" id="fileInput" name="file" onchange="updateLabel(this)" required>
           </div>
         <button type="submit" name="upload" class="btn btn-primary">Upload</button>
+    </form>
+
+    <h3>Query</h3>
+    <form action="/query/">
+        {% csrf_token %}
+          <div class="mb-3">
+            <label for="query" class="form-label">Upload your file</label>
+            <input class="form-control" id="query" name="query" required>
+          </div>
+        <button type="submit" name="upload" class="btn btn-primary">Asks</button>
     </form>
 
     <!-- List of Uploaded Files -->

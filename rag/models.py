@@ -10,12 +10,12 @@ from rag.rag import delete_corpus, create_corpus, upload_file, delete_file
 class DirectoryModel(models.Model):
     name = models.CharField(max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    corpus = models.CharField(max_length=300)
 
     def delete(self, *args, **kwargs):
         logging.info(f"Deleting directory: {self.name}")
 
-        delete_corpus(self.corpus_name())
+        delete_corpus(self.corpus)
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
@@ -24,10 +24,9 @@ class DirectoryModel(models.Model):
 
         if is_new:
             logging.info(f"Created new object: {self.name}")
-            create_corpus(self.corpus_name())
-
-    def corpus_name(self):
-        return f'{self.owner_id}-{self.name}'
+            corp = create_corpus(f'{self.owner.id}-{self.name}')
+            self.corpus = corp
+            self.save()
 
 
 class FileModel(models.Model):

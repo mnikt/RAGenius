@@ -13,23 +13,29 @@ credentials = service_account.Credentials.from_service_account_file(
 vertexai.init(project=PROJECT_ID, location="us-central1", credentials=credentials)
 
 
-def upload_file(uploaded_file, file):
+def upload_file(uploaded_file, file, path):
     url = upload_file_to_gcs(uploaded_file, file.id)
-    upload_file_to_rag(url, file.directory.corpus_name())
+    upload_file_to_rag(url, file.directory.corpus, path)
 
 
 def upload_file_to_gcs(uploaded_file, file_id, bucket_name="rag-techfest") -> str:
     client = storage.Client(credentials=credentials, project=PROJECT_ID)
     bucket = client.bucket(bucket_name)
-    blob = bucket.blob(f"uploads/{file_id}.pdf")
+    blob = bucket.blob(f"{file_id}.pdf")
 
     blob.upload_from_file(uploaded_file, content_type=uploaded_file.content_type)
     return f"gs://{bucket.name}/{blob.name}"
 
 
-def upload_file_to_rag(uploaded_file_gs_url, corpus_name):
-    rag.upload_file(corpus_name, uploaded_file_gs_url)
-
+def upload_file_to_rag(uploaded_file_gs_url, corpus_name, path):
+    rag.import_files(
+        corpus_name=corpus_name,
+        paths=[uploaded_file_gs_url],
+        transformation_config=rag.TransformationConfig(
+            rag.ChunkingConfig(chunk_size=512, chunk_overlap=100)
+        ),
+        max_embedding_requests_per_min=900,  # Optional
+    )
 
 def delete_file(file, bucket_name="rag-techfest"):
     client = storage.Client(credentials=credentials, project=PROJECT_ID)
@@ -45,12 +51,12 @@ def create_corpus(display_name):
         )
     )
 
-    rag.create_corpus(
+    return rag.create_corpus(
         display_name=display_name,
         backend_config=rag.RagVectorDbConfig(
             rag_embedding_model_config=embedding_model_config
         ),
-    )
+    ).name
 
 
 def delete_corpus(display_name):
@@ -71,8 +77,10 @@ def ask_question(question: str, corpus_name: str) -> str:
         text=question,
         rag_retrieval_config=rag_retrieval_config,
     )
-
-    return response["results"][0].text
+    contexts = response.contexts.contexts
+    if len(contexts) > 0:
+        return contexts[0].text
+    return "I cannot answer this question"
 
 
 def do(file_path):
@@ -83,9 +91,6 @@ def do(file_path):
 
     # Create RagCorpus
     # Configure embedding model, for example "text-embedding-005".
-
-
-
 
     # Import Files to the RagCorpus
 
