@@ -88,10 +88,12 @@ def quiz(request):
     dir_id = request.GET.get('directory')
 
     if query_:
+        query_ = f"Generate quiz containing 5 questions about topic: {query_}"
+
         corpus = DirectoryModel.objects.get(id=dir_id).corpus
         res = ask_question(query_, corpus)
     else:
-        res = "Hello. How can I help you?"
+        res = "Hello. I will generate quiz for you."
 
     directories = DirectoryModel.objects.filter(owner=request.user)
-    return render(request, "chat.html", {'res': res, 'directories': directories})
+    return render(request, "quiz.html", {'res': res, 'directories': directories})
