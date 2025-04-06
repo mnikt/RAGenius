@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-from rag.rag import delete_corpus, create_corpus, upl, upload_file, delete_file
+from rag.rag import delete_corpus, create_corpus, upload_file, delete_file
 
 
 class DirectoryModel(models.Model):
