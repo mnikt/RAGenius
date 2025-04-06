@@ -17,6 +17,11 @@
     <!-- File Upload Form -->
     <h3>Upload a New File</h3>
     <form method="POST" enctype="multipart/form-data">
+        <select id="select-option" class="form-select" style="max-width: 150px;" name="directory">
+        {% for directory in directories %}
+          <option value="{{ directory.id }}">{{ directory.name }}</option>
+        {% endfor %}
+    </select>
         {% csrf_token %}
           <div class="mb-3">
             <label for="fileInput" class="form-label">Upload your file</label>
@@ -25,23 +30,13 @@
         <button type="submit" name="upload" class="btn btn-primary">Upload</button>
     </form>
 
-    <h3>Query</h3>
-    <form action="/query/">
-        {% csrf_token %}
-          <div class="mb-3">
-            <label for="query" class="form-label">Upload your file</label>
-            <input class="form-control" id="query" name="query" required>
-          </div>
-        <button type="submit" name="upload" class="btn btn-primary">Asks</button>
-    </form>
-
     <!-- List of Uploaded Files -->
     <h3 class="mt-5">Existing Files</h3>
     {% if files %}
         <ul class="list-group">
             {% for file in files %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <a href="{{ file.url }}" target="_blank">{{ file.name }}</a>
+                    <a href="{{ file.url }}" target="_blank">{{ file.directory.name }}/{{ file.name }}</a>
                     <a href="{% url 'delete_file' file.id %}" class="btn btn-danger btn-sm">Delete</a>
                 </li>
             {% endfor %}
