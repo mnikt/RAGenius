@@ -3,7 +3,7 @@ from django.http import HttpResponseNotAllowed, Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect
 
 from rag.models import FileModel, DirectoryModel
-from rag.rag import do, upload_file_to_gcs, upload_file_to_rag
+from rag.rag import do, upload_file_to_gcs, upload_file_to_rag, upload_file
 
 
 def home(request):
@@ -17,16 +17,18 @@ def files(request):
     if request.method == 'GET':
         files = FileModel.objects.filter(directory__owner=request.user)
         return render(request, 'files.html', {'files': files})
+
     elif request.method == 'POST':
-        file = request.FILES['file']
+        data = request.FILES['file']
         directory = request.POST.get('directory', 1)
-        url = upload_file_to_gcs(file)
-        do(url)
+
+        file = FileModel.objects.create(directory=directory, name=data.name)
+
+        upload_file(data, file)
 
         # if not DirectoryModel.objects.filter(id=directory).filter(owner=request.user).exists():
         #     raise Http404()
 
-        FileModel.objects.create(directory=directory, name=file.name)
         return redirect('files')
     else:
         return HttpResponseNotAllowed(['GET', 'POST'])

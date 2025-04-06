@@ -4,7 +4,6 @@ from vertexai.preview import rag
 from vertexai.generative_models import GenerativeModel, Tool
 import vertexai
 
-from rag.models import FileModel
 
 PROJECT_ID = "pw-techfest-team-05"
 credentials = service_account.Credentials.from_service_account_file(
@@ -14,7 +13,7 @@ credentials = service_account.Credentials.from_service_account_file(
 vertexai.init(project=PROJECT_ID, location="us-central1", credentials=credentials)
 
 
-def upload_file(uploaded_file, file: FileModel):
+def upload_file(uploaded_file, file):
     url = upload_file_to_gcs(uploaded_file, file.id)
     upload_file_to_rag(url, file.directory.corpus_name())
 
@@ -32,7 +31,7 @@ def upload_file_to_rag(uploaded_file_gs_url, corpus_name):
     rag.upload_file(corpus_name, uploaded_file_gs_url)
 
 
-def delete_file(file: FileModel, bucket_name="rag-techfest"):
+def delete_file(file, bucket_name="rag-techfest"):
     client = storage.Client(credentials=credentials, project=PROJECT_ID)
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(f"uploads/{file.id}.pdf")
