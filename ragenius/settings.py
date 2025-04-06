@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-9pwy(&-tf6lqj8%rlh#_uzbe)m#bl&xv!-)p5w^bru)r-gnhv@
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+CORS_ORIGIN_ALLOW_ALL = True
+CSRF_TRUSTED_ORIGINS = ['https://*', 'http://*']
 
 # Application definition
 

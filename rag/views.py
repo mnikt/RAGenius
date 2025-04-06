@@ -81,3 +81,17 @@ def query(request):
 
     directories = DirectoryModel.objects.filter(owner=request.user)
     return render(request, "chat.html", {'res': res, 'directories': directories})
+
+
+def quiz(request):
+    query_ = request.GET.get('query')
+    dir_id = request.GET.get('directory')
+
+    if query_:
+        corpus = DirectoryModel.objects.get(id=dir_id).corpus
+        res = ask_question(query_, corpus)
+    else:
+        res = "Hello. How can I help you?"
+
+    directories = DirectoryModel.objects.filter(owner=request.user)
+    return render(request, "chat.html", {'res': res, 'directories': directories})
