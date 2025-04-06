@@ -65,6 +65,37 @@ def delete_corpus(display_name):
 
 def ask_question(question: str, corpus_name: str) -> str:
     rag_retrieval_config = rag.RagRetrievalConfig(
+        top_k=3,  # Optional
+        filter=rag.Filter(vector_distance_threshold=0.5),  # Optional
+    )
+
+    rag_retrieval_tool = Tool.from_retrieval(
+        retrieval=rag.Retrieval(
+            source=rag.VertexRagStore(
+                rag_resources=[
+                    rag.RagResource(
+                        rag_corpus=corpus_name,  # Currently only 1 corpus is allowed.
+                        # Optional: supply IDs from `rag.list_files()`.
+                        # rag_file_ids=["rag-file-1", "rag-file-2", ...],
+                    )
+                ],
+                rag_retrieval_config=rag_retrieval_config,
+            ),
+        )
+    )
+
+    # Create a Gemini model instance
+    rag_model = GenerativeModel(
+        model_name="gemini-2.0-flash-001", tools=[rag_retrieval_tool]
+    )
+
+    # Generate response
+    response = rag_model.generate_content(question)
+    return response.text
+
+
+def ask_question2(question: str, corpus_name: str) -> str:
+    rag_retrieval_config = rag.RagRetrievalConfig(
         filter=rag.Filter(vector_distance_threshold=0.5),  # Optional
     )
 
@@ -81,44 +112,3 @@ def ask_question(question: str, corpus_name: str) -> str:
     if len(contexts) > 0:
         return contexts[0].text
     return "I cannot answer this question"
-
-
-def do(file_path):
-    # Create a RAG Corpus, Import Files, and Generate a response
-
-    display_name = "test_corpus"
-    # paths = ["gs://my_bucket/my_files_dir"]  # Supports Google Cloud Storage and Google Drive Links
-
-    # Create RagCorpus
-    # Configure embedding model, for example "text-embedding-005".
-
-    # Import Files to the RagCorpus
-
-    # Direct context retrieval
-
-
-    # Enhance generation
-    # Create a RAG retrieval tool
-    # rag_retrieval_tool = Tool.from_retrieval(
-    #     retrieval=rag.Retrieval(
-    #         source=rag.VertexRagStore(
-    #             rag_resources=[
-    #                 rag.RagResource(
-    #                     rag_corpus=rag_corpus.name,  # Currently only 1 corpus is allowed.
-    #                     # Optional: supply IDs from `rag.list_files()`.
-    #                     # rag_file_ids=["rag-file-1", "rag-file-2", ...],
-    #                 )
-    #             ],
-    #             rag_retrieval_config=rag_retrieval_config,
-    #         ),
-    #     )
-    # )
-    #
-    # # Create a Gemini model instance
-    # rag_model = GenerativeModel(
-    #     model_name="gemini-2.0-flash-001", tools=[rag_retrieval_tool]
-    # )
-    #
-    # # Generate response
-    # response = rag_model.generate_content("What is RAG and why it is helpful?")
-    # print(response.text)

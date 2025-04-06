@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Interface</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .chat-container {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .chat-window {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      max-width: 75%;
+    }
+
+    .user-message {
+      background-color: #d1e7dd;
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .bot-message {
+      background-color: #e2e3e5;
+      align-self: flex-start;
+      text-align: left;
+    }
+
+    .chat-input {
+      border-top: 1px solid #ddd;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .input-group input {
+      border-radius: 20px;
+    }
+
+    .input-group button {
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container d-flex flex-column">
+  <div class="chat-window d-flex flex-column" id="chat-window">
+    <!-- Messages will be injected here -->
+    <div class="message bot-message">{{ res }}</div>
+  </div>
+
+  <form action="/chat/" class="chat-input">
+    <div class="input-group">
+      <input type="text" id="user-input" name="query" class="form-control" placeholder="Type your message..." required>
+      <button class="btn btn-primary" type="submit">Send</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function handleMessage(e) {
+    e.preventDefault();
+
+    const input = document.getElementById("user-input");
+    const chatWindow = document.getElementById("chat-window");
+
+    const userMessage = input.value.trim();
+    if (!userMessage) return;
+
+    // Add user message
+    const userDiv = document.createElement("div");
+    userDiv.className = "message user-message align-self-end";
+    userDiv.innerText = userMessage;
+    chatWindow.appendChild(userDiv);
+
+    // Add fake bot reply
+    const botDiv = document.createElement("div");
+    botDiv.className = "message bot-message";
+    botDiv.innerText = "Thinking...";
+    chatWindow.appendChild(botDiv);
+
+    // Scroll to bottom
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+
+    // Fake async response
+    setTimeout(() => {
+      botDiv.innerText = "Thanks for your message: " + userMessage;
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }, 1000);
+
+    input.value = '';
+  }
+</script>
+
+</body>
+</html>

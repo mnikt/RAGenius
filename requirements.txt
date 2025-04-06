@@ -11,5 +11,5 @@ nltk
 vertexai
 faiss-cpu
 numpy
-google-cloud-aiplatform
+google-cloud-aiplatform==1.87.0
 google

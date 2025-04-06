@@ -3,7 +3,7 @@ from django.http import HttpResponseNotAllowed, Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect
 
 from rag.models import FileModel, DirectoryModel
-from rag.rag import do, upload_file_to_gcs, upload_file_to_rag, upload_file, ask_question
+from rag.rag import upload_file, ask_question
 
 
 @login_required
@@ -74,7 +74,9 @@ def query(request):
     dir_id = request.GET.get('directory', 2)
     corpus = DirectoryModel.objects.get(id=dir_id).corpus
 
-    res = ask_question(query_, corpus)
-    print(res)
+    if query_:
+        res = ask_question(query_, corpus)
+    else:
+        res = "Hello. How can I help you?"
 
-    return redirect('files')
+    return render(request, "chat.html", {'res': res})
