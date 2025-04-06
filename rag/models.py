@@ -1,5 +1,10 @@
+import logging
+
 from django.contrib.auth.models import User
 from django.db import models
+
+
+from rag.rag import delete_corpus, create_corpus, upl, upload_file, delete_file
 
 
 class DirectoryModel(models.Model):
@@ -7,8 +12,30 @@ class DirectoryModel(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+    def delete(self, *args, **kwargs):
+        logging.info(f"Deleting directory: {self.name}")
+
+        delete_corpus(self.corpus_name())
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        if is_new:
+            logging.info(f"Created new object: {self.name}")
+            create_corpus(self.corpus_name())
+
+    def corpus_name(self):
+        return f'{self.owner_id}-{self.name}'
+
+
 class FileModel(models.Model):
-    # file = models.FileField(upload_to='files')
     name = models.CharField(max_length=100)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     directory = models.ForeignKey(DirectoryModel, on_delete=models.CASCADE)
+
+    def delete(self, *args, **kwargs):
+        logging.info(f"Deleting file: {self.name}")
+        delete_file(self)
+        super().delete(*args, **kwargs)

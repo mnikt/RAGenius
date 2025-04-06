@@ -3,7 +3,7 @@ from django.http import HttpResponseNotAllowed, Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect
 
 from rag.models import FileModel, DirectoryModel
-from rag.rag import do, upload_file_to_gcs
+from rag.rag import do, upload_file_to_gcs, upload_file_to_rag
 
 
 def home(request):
