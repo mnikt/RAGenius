@@ -71,12 +71,13 @@ def directory_create(request):
 @login_required
 def query(request):
     query_ = request.GET.get('query')
-    dir_id = request.GET.get('directory', 2)
-    corpus = DirectoryModel.objects.get(id=dir_id).corpus
+    dir_id = request.GET.get('directory')
 
     if query_:
+        corpus = DirectoryModel.objects.get(id=dir_id).corpus
         res = ask_question(query_, corpus)
     else:
         res = "Hello. How can I help you?"
 
-    return render(request, "chat.html", {'res': res})
+    directories = DirectoryModel.objects.filter(owner=request.user)
+    return render(request, "chat.html", {'res': res, 'directories': directories})
