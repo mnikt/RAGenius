@@ -9,3 +9,4 @@ vertexai
 faiss-cpu
 google-cloud-aiplatform==1.87.0
 google
+django-cors-headers
